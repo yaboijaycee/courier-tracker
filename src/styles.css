@@ -57,3 +57,6 @@ button.danger { margin-top: 24px; color: var(--red); border-color: var(--red); b
 .timeline li.tl-delivered::before { background: var(--green); }
 .timeline li.tl-exception::before { background: var(--red); }
 .tl-time { min-width: 110px; font-size: .8rem; color: var(--muted); }
+
+.form { display: flex; flex-direction: column; gap: 10px; }
+.form label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
