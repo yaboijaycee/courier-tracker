@@ -26,3 +26,11 @@ button.danger { margin-top: 24px; color: var(--red); border-color: var(--red); b
 .stat.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(47,91,234,.15); }
 .stat-n { font-size: 1.3rem; font-weight: 700; }
 .stat-l { font-size: .75rem; color: var(--muted); }
+
+.badge { font-size: .72rem; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.badge-created { background: #e9ecf5; color: var(--muted); }
+.badge-picked_up { background: #e6f5f7; color: var(--teal); }
+.badge-in_transit { background: #ece6ff; color: var(--purple); }
+.badge-out_for_delivery { background: #fff1de; color: var(--orange); }
+.badge-delivered { background: #e0f5e9; color: var(--green); }
+.badge-exception { background: #fde7e7; color: var(--red); }
