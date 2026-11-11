@@ -1,13 +1,31 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { STATUSES, seedShipments } from "./data.js";
 import ShipmentList from "./components/ShipmentList.jsx";
 import ShipmentDetail from "./components/ShipmentDetail.jsx";
+import NewShipmentForm from "./components/NewShipmentForm.jsx";
+
+const STORAGE_KEY = "courier-tracker:shipments";
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return seedShipments;
+}
 
 export default function App() {
-  const [shipments] = useState(seedShipments);
+  const [shipments, setShipments] = useState(load);
   const [selectedId, setSelectedId] = useState(shipments[0]?.id ?? null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
+  const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(shipments));
+    } catch {}
+  }, [shipments]);
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -27,10 +45,38 @@ export default function App() {
 
   const selected = shipments.find((s) => s.id === selectedId);
 
+  const createShipment = (data) => {
+    const id = `CT-${Date.now().toString().slice(-6)}`;
+    const shipment = {
+      id, ...data, status: "created",
+      events: [{
+        status: "created", location: data.origin,
+        note: "Shipment label created", at: new Date().toISOString(),
+      }],
+    };
+    setShipments((prev) => [shipment, ...prev]);
+    setSelectedId(id);
+  };
+
+  const addEvent = (id, ev) =>
+    setShipments((prev) =>
+      prev.map((s) =>
+        s.id === id
+          ? { ...s, status: ev.status, events: [...s.events, { ...ev, at: new Date().toISOString() }] }
+          : s
+      )
+    );
+
+  const deleteShipment = (id) => {
+    setShipments((prev) => prev.filter((s) => s.id !== id));
+    setSelectedId(null);
+  };
+
   return (
     <div className="app">
       <header className="topbar">
         <h1>📦 Courier Tracker</h1>
+        <button className="primary" onClick={() => setShowForm(true)}>+ New shipment</button>
       </header>
 
       <section className="stats">
@@ -61,14 +107,18 @@ export default function App() {
             <ShipmentDetail
               key={selected.id}
               shipment={selected}
-              onAddEvent={() => {}}
-              onDelete={() => {}}
+              onAddEvent={addEvent}
+              onDelete={deleteShipment}
             />
           ) : (
             <p className="empty">Select a shipment to see details.</p>
           )}
         </section>
       </main>
+
+      {showForm && (
+        <NewShipmentForm onCreate={createShipment} onClose={() => setShowForm(false)} />
+      )}
     </div>
   );
 }
