@@ -60,3 +60,6 @@ button.danger { margin-top: 24px; color: var(--red); border-color: var(--red); b
 
 .form { display: flex; flex-direction: column; gap: 10px; }
 .form label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
+
+.modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(15,20,40,.45); display: grid; place-items: center; padding: 16px; }
+.modal { background: var(--card); padding: 20px; border-radius: 12px; width: 100%; max-width: 420px; }
