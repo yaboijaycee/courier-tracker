@@ -8,6 +8,7 @@ A React + Vite app for tracking couriers and deliveries.
 - Shipment detail with progress bar and tracking timeline
 - Add status updates to a shipment
 - Create and delete shipments
+- Login and sign up (demo accounts stored in the browser; try admin / admin123)
 - Data saved in the browser (localStorage), with sample data on first load
 
 ## Run
